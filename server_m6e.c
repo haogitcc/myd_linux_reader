@@ -706,7 +706,9 @@ try:
 				goto try;
 			}
 			if(buffer[2] == 0x03)
-				m6e_firmware_response(buffer);
+                        {
+				//m6e_firmware_response(buffer);
+			}
 			error = tcp_sendBytes(connected_fd, len, buffer);
 				//printf("tcp send = %d\n",error);
 		}

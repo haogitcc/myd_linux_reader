@@ -32,7 +32,7 @@ void *interrupt()
 
 int main(int argc, char **argv)
 {
-    printf("\n\nstart ffff ver\n\n");
+    printf("\n\nstart ffff ver 1.0\n\n");
 	int ret = -1;
 	interrupt();
   	sys_config_init();  
