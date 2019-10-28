@@ -219,7 +219,7 @@ int m6e_set_opcode(char *value)
 
 int m6e_configuration_init()
 {
-    printf("[%s, %d] m6e_configuration_init\n", __FILE__, __LINE__);
+    printf("m6e_configuration_init\n", __FILE__, __LINE__);
 	int ret = -1;
 	sysSettingGetInt("region", &configuration.region, 0);
 	ret = m6e_set_configuration(TMR_PARAM_REGION_ID, configuration.region);
@@ -679,7 +679,7 @@ void*m6e_pthread_client(void *arg)
 			error = m6e_upgrade_resolve(buffer);
 			if(error > 0) {
 				 int flags = m6e_upgrade_response(connected_fd);
-				}
+			}
 			if(240 == error)
 				continue;
 			else {
@@ -785,7 +785,7 @@ int m6e_start(void)
 
     server_fd = socket(PF_INET, SOCK_STREAM, 0);
     if(server_fd < 0) {
-        printf("Server sockect creat\n");
+        printf("Server sockect create\n");
         return -1;
     }
 
@@ -825,9 +825,9 @@ int m6e_start(void)
 
         printf("Server accept success\n");
 
-	anetKeepAlive(client_fd, 10);
-	int sendbuf = 6144;
-	setsockopt(client_fd, SOL_SOCKET, SO_SNDBUF, &sendbuf, sizeof(sendbuf));
+		anetKeepAlive(client_fd, 10);
+		int sendbuf = 6144;
+		setsockopt(client_fd, SOL_SOCKET, SO_SNDBUF, &sendbuf, sizeof(sendbuf));
         pthread_t stbmonitor_pthread = 0;
         pthread_attr_t tattr;
         pthread_attr_init(&tattr);

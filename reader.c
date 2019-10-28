@@ -12,13 +12,29 @@
 #include "m6e_init.h"
 #include "gpio_init.h"
 
+//MYD demo board
 #define DEVICE "/dev/ttymxc1"
 #define DEVICE_NAME "tmr:///dev/ttymxc1"
 
+//M28x demo board
+//#define DEVICE "/dev/ttySP0"
+//#define DEVICE_NAME "tmr:///dev/ttySP0"
+
+/*
+处理SIGPIPE信号
+1、client发送了消息，没等server返回就close了
+2、这时候server可以给client发送消息，但是不知道client已断开
+3、server就会收到SIG_PIPE这个回复
+*/
 void handle_pipe(int sig)
 {
-
+  //do nothing
+  printf("### handle_pipe %d\n", sig);
 }
+
+/*
+检查或修改与指定信号相关联的处理动作
+*/
 void *interrupt()
 {
   	struct sigaction action;
@@ -31,11 +47,12 @@ void *interrupt()
 
 int main(int argc, char **argv)
 {
-    printf("\n\nstart MYD ver 1.0\n\n");
+    printf("\n\n MYD ver 1.0 \n\n");
 	int ret = -1;
 	interrupt();
   	sys_config_init();  
   	sys_config_load(0);
+	
 	mid_task_init();	
 	mid_timer_init();
 
@@ -46,12 +63,10 @@ int main(int argc, char **argv)
 
 	gpio_init();
 
-    printf("m6e_init start\n");
 	ret = m6e_init(DEVICE_NAME);
-	printf("m6e_init %d\n", ret);
 	if(ret != 0)
 	{
-	    int times = 0;
+		int times = 0;
 		while(times <= 3 && ret != 0)
 		{
             printf("    re init times= %d, %d\n", ++times, ret);
@@ -60,17 +75,16 @@ int main(int argc, char **argv)
 		}
 		if(ret != 0 && times == 4)
 		{
-		    printf("    reader start failed \n");
+			printf("m6e_init and restart failed\n");
 			return -1;
 		}
 	}
-	
-	if(0 == ret)
-	{
+	else {
 	    printf("m6e_init success\n");
 		m6e_configuration_init();
 		m6e_destory();
 	}
+	
 	if(serial_open(DEVICE) < 0)
     {
         printf("serial_open failed \n");

@@ -14,7 +14,5 @@ int m6e_set_configuration(int key, int value);
 }
 #endif
 
-
-
 #endif
 

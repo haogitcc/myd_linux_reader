@@ -318,18 +318,17 @@ int sysSettingGetInt(const char* name, int* value, int searchFlag)
         printf("undefined parameter %s\n", name);
 	
     mid_mutex_unlock(g_mutex);
-    printf("name:%s, value:%d\n", name, *value);
+    printf("name:%s, value: %d\n", name, *value);
     return 0;
 }
 
 int sysSettingSetString(const char* name, const char* value)
 {
-    printf("name:%s, value:%s\n", name, value);
+    printf("name:%s, value: %s\n", name, value);
     if(mid_mutex_lock(g_mutex)){
         printf("mutex lock error. Get doubleStack.\n");
         return -1;
     }
-
 
     if (!strcmp(name, "ip")) {
         if(strcmp(sysConfigs.ip, value)) {
