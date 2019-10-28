@@ -2,7 +2,6 @@
 #include <sys/wait.h>
 #include <signal.h>
 
-
 #include "app_sys_setting.h"
 #include "mid_timer.h"
 #include "mid_task.h"
@@ -13,8 +12,8 @@
 #include "m6e_init.h"
 #include "gpio_init.h"
 
-#define DEVICE "/dev/ttySP0"
-#define DEVICE_NAME "tmr:///dev/ttySP0"
+#define DEVICE "/dev/ttymxc1"
+#define DEVICE_NAME "tmr:///dev/ttymxc1"
 
 void handle_pipe(int sig)
 {
@@ -32,7 +31,7 @@ void *interrupt()
 
 int main(int argc, char **argv)
 {
-    printf("\n\nstart ffff ver 1.0\n\n");
+    printf("\n\nstart MYD ver 1.0\n\n");
 	int ret = -1;
 	interrupt();
   	sys_config_init();  
@@ -48,7 +47,7 @@ int main(int argc, char **argv)
 	gpio_init();
 
     printf("m6e_init start\n");
-	ret = m6e_init("tmr:///dev/ttySP0");
+	ret = m6e_init(DEVICE_NAME);
 	printf("m6e_init %d\n", ret);
 	if(ret != 0)
 	{
@@ -56,7 +55,7 @@ int main(int argc, char **argv)
 		while(times <= 3 && ret != 0)
 		{
             printf("    re init times= %d, %d\n", ++times, ret);
-		    ret = m6e_init("tmr:///dev/ttySP0");
+		    ret = m6e_init(DEVICE_NAME);
 			printf("    re init %d\n", ret);
 		}
 		if(ret != 0 && times == 4)
@@ -76,11 +75,12 @@ int main(int argc, char **argv)
     {
         printf("serial_open failed \n");
         return -1;
-	}
-		
-	else {
+	}	
+	else
+	{
 		m6e_baudrate(460800);
 		serial_flush();
+		printf("serial_open success\n");
 	}
 	pthread_tag_init();
 	m6e_start();
