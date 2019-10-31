@@ -12,13 +12,16 @@
 #include "m6e_init.h"
 #include "gpio_init.h"
 
+#define MYD
+#ifdef MYD
 //MYD demo board
 #define DEVICE "/dev/ttymxc1"
 #define DEVICE_NAME "tmr:///dev/ttymxc1"
-
+#else
 //M28x demo board
-//#define DEVICE "/dev/ttySP0"
-//#define DEVICE_NAME "tmr:///dev/ttySP0"
+#define DEVICE "/dev/ttySP0"
+#define DEVICE_NAME "tmr:///dev/ttySP0"
+#endif
 
 /*
 处理SIGPIPE信号
@@ -48,6 +51,7 @@ void *interrupt()
 int main(int argc, char **argv)
 {
     printf("\n\n MYD ver 1.0 \n\n");
+	printf("device=%s\n", DEVICE);
 	int ret = -1;
 	interrupt();
   	sys_config_init();  
