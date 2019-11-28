@@ -813,7 +813,6 @@ int m6e_start(void)
 {
     //int server_fd = -1; // sendlen;
     struct sockaddr_in tcp_addr;
-    int len = 0;
 
     server_fd = socket(PF_INET, SOCK_STREAM, 0);
     if(server_fd < 0) {
@@ -822,13 +821,14 @@ int m6e_start(void)
     }
 
     int opt = 1;
-    len = sizeof(opt);
-    setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, len);
+    int opt_len = sizeof(opt);
+    setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, opt_len);
 
     memset(&tcp_addr, 0, sizeof(tcp_addr));
     tcp_addr.sin_family = AF_INET;
     tcp_addr.sin_port = htons(PORT);
     tcp_addr.sin_addr.s_addr = INADDR_ANY;
+	
     if(bind(server_fd, (struct sockaddr*)&tcp_addr, sizeof(tcp_addr)) < 0) {
         printf("Server socket bind error\n");
         close(server_fd);
@@ -844,8 +844,8 @@ int m6e_start(void)
     }
 
     while(1) {
-        len = sizeof(tcp_addr);
-        client_fd = accept(server_fd, (struct sockaddr*)&tcp_addr, &len);
+        int tcpaddr_len = sizeof(tcp_addr);
+        client_fd = accept(server_fd, (struct sockaddr*)&tcp_addr, &tcpaddr_len);
 
         if(client_fd < 0) {
             printf("Server accept error\n");
@@ -856,7 +856,6 @@ int m6e_start(void)
         }
 
         printf("Server accept success\n");
-
 		anetKeepAlive(client_fd, 10);
 		int sendbuf = 6144;
 		setsockopt(client_fd, SOL_SOCKET, SO_SNDBUF, &sendbuf, sizeof(sendbuf));
